@@ -1,13 +1,125 @@
 <?xml-stylesheet href="/rss.xsl" type="text/xsl"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>My New Hugo Site</title>
-    <link>http://example.org/</link>
-    <description>Recent content on My New Hugo Site</description>
+    <title>tiany&#39;s Blog</title>
+    <link>https://windytiany.github.io/</link>
+    <description>Recent content on tiany&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
+    <copyright>tiany - AS student</copyright>
+    <lastBuildDate>Tue, 31 Jan 2023 13:35:25 +0800</lastBuildDate>
     
-        <atom:link href="http://example.org/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="https://windytiany.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Build your blog by Hugo &#43; Github Pages</title>
+        <link>https://windytiany.github.io/posts/post1/</link>
+        <pubDate>Tue, 31 Jan 2023 13:35:25 +0800</pubDate>
+        
+        <guid>https://windytiany.github.io/posts/post1/</guid>
+        <description>tiany&#39;s Blog https://windytiany.github.io/posts/post1/ -&lt;h3 id=&#34;0-foreword&#34;&gt;0 Foreword&lt;/h3&gt;
+&lt;p&gt;This is my first blog and I want to record the process I build this blog site on Windows.&lt;/p&gt;
+&lt;h3 id=&#34;1-prerequisites&#34;&gt;1 Prerequisites&lt;/h3&gt;
+&lt;p&gt;First, you need to download/install the following:&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://go.dev/doc/install&#34;&gt;Go&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://git-scm.com/&#34;&gt;Git&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/gohugoio/hugo&#34;&gt;Hugo&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Please add them to &lt;em&gt;environment variables&lt;/em&gt;.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;You can check using the following commands:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;go version
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git version
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hugo version
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;2-build-your-site&#34;&gt;2 Build your site&lt;/h3&gt;
+&lt;h5 id=&#34;21-generate-folder&#34;&gt;2.1 generate folder&lt;/h5&gt;
+&lt;p&gt;Run the following command:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;hugo new site my_blog
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;It would generate a folder named &lt;em&gt;my_blog&lt;/em&gt; in current directory and the following are the functions of these files/folders:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;em&gt;config.toml&lt;/em&gt; : the configuration file.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;em&gt;content&lt;/em&gt; : stores all the content of the website, including all of your blog posts, resumes and so on, can include folders, but usually all &lt;code&gt;.md&lt;/code&gt; files.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;em&gt;static&lt;/em&gt; : stores static files such as your background pictures, logos, css, js, etc. The files in this directory will be directly copied to it &lt;code&gt;/public&lt;/code&gt;. This folder has higher priority than the &lt;code&gt;/static&lt;/code&gt;folder under the theme.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;em&gt;themes&lt;/em&gt; : stores all the themes downloaded and you can choose the theme by editing config file.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;em&gt;archetypes&lt;/em&gt; : stored &lt;code&gt;.md&lt;/code&gt;template files, it has higher priority than &lt;code&gt;/archetypes&lt;/code&gt;folders under the theme.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;data : stores data files for template calls.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;em&gt;layouts&lt;/em&gt; : store &lt;code&gt;.html&lt;/code&gt;templates, this folder has higher priority than &lt;code&gt;/layouts&lt;/code&gt;folders under the theme.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;em&gt;public&lt;/em&gt; : After executing the &lt;code&gt;hugo&lt;/code&gt;command, store the generated static file.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h5 id=&#34;22-download-and-use-theme&#34;&gt;2.2 download and use theme&lt;/h5&gt;
+&lt;p&gt;You can go to &lt;a href=&#34;https://themes.gohugo.io/&#34;&gt;this site&lt;/a&gt; to find themes. My blog uses &lt;em&gt;diary&lt;/em&gt; so I&amp;rsquo;ll take it as an example.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;cd my_blog
+cd themes
+git clone https://github.com/AmazingRise/hugo-theme-diary
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;These commands would download the theme into &lt;em&gt;themes&lt;/em&gt; folder. To use it, you can open &lt;em&gt;config.toml&lt;/em&gt;, and add:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;theme = &amp;#39;diary&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Save it, and run:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;hugo server
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Open &lt;a href=&#34;http://127.0.0.1:1313&#34;&gt;http://127.0.0.1:1313&lt;/a&gt;, you can see that the theme is used.&lt;/p&gt;
+&lt;h5 id=&#34;23-write-an-article&#34;&gt;2.3 write an article&lt;/h5&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;cd my_blog
+hugo new posts/post1.md
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;It would generate a file called &lt;em&gt;post1.md&lt;/em&gt;. Open it, set &lt;em&gt;draft&lt;/em&gt; to be false. Below that, you can write your article using &lt;em&gt;Markdown&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;Save it and run the server, you can see your article now!&lt;/p&gt;
+&lt;h3 id=&#34;3-deploy-your-site-on-github-pages&#34;&gt;3 Deploy your site on Github Pages&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Firstly, you should register a &lt;em&gt;github&lt;/em&gt; account.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Open your home page, click &amp;ldquo;+&amp;rdquo;, and then click &amp;ldquo;new repository&amp;rdquo;. The name should be like &amp;ldquo;&lt;em&gt;username&lt;/em&gt;.github.io&amp;rdquo;, then click &amp;ldquo;create repository&amp;rdquo;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;cd my_blog
+hugo
+cd public 
+git init
+git add .
+git remote add origin https://github.com/username/username.github.io.git
+git commit -m &amp;#34;first commit&amp;#34;
+git push origin master
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;    These commands would build your site and send them to github.&lt;/p&gt;
+&lt;p&gt;    4. Open your repository, click &amp;ldquo;settings&amp;rdquo;, open &amp;ldquo;Pages&amp;rdquo;, click the link and that&amp;rsquo;s your website!&lt;/p&gt;
+&lt;p&gt;If you want to update your blog, run the following commands:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;cd my_blog
+hugo
+cd public 
+git init
+git add .
+git commit -m &amp;#34;first commit&amp;#34;
+git push origin master
+&lt;/code&gt;&lt;/pre&gt;- https://windytiany.github.io/posts/post1/ - tiany - AS student</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>Test2</title>
+        <link>https://windytiany.github.io/posts/post2/</link>
+        <pubDate>Mon, 30 Jan 2023 16:51:33 +0800</pubDate>
+        
+        <guid>https://windytiany.github.io/posts/post2/</guid>
+        <description>tiany&#39;s Blog https://windytiany.github.io/posts/post2/ -&lt;h3 id=&#34;test2&#34;&gt;Test2&lt;/h3&gt;
+- https://windytiany.github.io/posts/post2/ - tiany - AS student</description>
+        </item>
     
     
   </channel>
