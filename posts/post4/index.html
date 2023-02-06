@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html><head>
+<title>Notes on machine learning 1</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="I take Andrew Ng&#39;s machine learning class and this note can help me recap the essential formula and code.">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+<link rel="stylesheet" href="/scss/journal.min.e78ecf1f01bdd175a52616472d7f6c77fa0d72eb91b15a27ce24fb7d302a6aa2.css" integrity="sha256-547PHwG90XWlJhZHLX9sd/oNcuuRsVonziT7fTAqaqI=" media="screen">
+
+
+
+<link rel="stylesheet" href="/scss/dark-mode.min.e96cc014086ea3bea59fb4923f8c19d6b203a7af229ee5f9599c0a4cb90e3bbd.css" integrity="sha256-6WzAFAhuo76ln7SSP4wZ1rIDp68inuX5WZwKTLkOO70=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+          
+          
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+          ],
+          
+          throwOnError : false
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://windytiany.github.io/">
+    
+        <div class="nav-title">
+            tiany&#39;s Blog
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	tiany - AS student
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#regression" onclick="onNavClick(`#regression-nav`)" id="regression-nav">
+									Regression
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#model" onclick="onNavClick(`#model-nav`)" id="model-nav">
+									Model
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#terminology" onclick="onNavClick(`#terminology-nav`)" id="terminology-nav">
+									Terminology
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#cost-function" onclick="onNavClick(`#cost-function-nav`)" id="cost-function-nav">
+									Cost function
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#gradient-descent" onclick="onNavClick(`#gradient-descent-nav`)" id="gradient-descent-nav">
+									Gradient descent
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#binary-classificaiton" onclick="onNavClick(`#binary-classificaiton-nav`)" id="binary-classificaiton-nav">
+									Binary classificaiton
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#model-1" onclick="onNavClick(`#model-1-nav`)" id="model-1-nav">
+									Model
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#cost-function-1" onclick="onNavClick(`#cost-function-1-nav`)" id="cost-function-1-nav">
+									Cost function
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#gradient-descent-1" onclick="onNavClick(`#gradient-descent-1-nav`)" id="gradient-descent-1-nav">
+									Gradient descent
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#improvement" onclick="onNavClick(`#improvement-nav`)" id="improvement-nav">
+									Improvement
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#feature-scaling" onclick="onNavClick(`#feature-scaling-nav`)" id="feature-scaling-nav">
+									Feature Scaling
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#feature-engineering" onclick="onNavClick(`#feature-engineering-nav`)" id="feature-engineering-nav">
+									Feature Engineering
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#regularization" onclick="onNavClick(`#regularization-nav`)" id="regularization-nav">
+									Regularization
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#use-scikit-learn" onclick="onNavClick(`#use-scikit-learn-nav`)" id="use-scikit-learn-nav">
+									Use scikit-learn
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#regression" onclick="onNavClick(`#regression-nav`)" id="regression-nav">
+									Regression
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#model" onclick="onNavClick(`#model-nav`)" id="model-nav">
+									Model
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#terminology" onclick="onNavClick(`#terminology-nav`)" id="terminology-nav">
+									Terminology
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#cost-function" onclick="onNavClick(`#cost-function-nav`)" id="cost-function-nav">
+									Cost function
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#gradient-descent" onclick="onNavClick(`#gradient-descent-nav`)" id="gradient-descent-nav">
+									Gradient descent
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#binary-classificaiton" onclick="onNavClick(`#binary-classificaiton-nav`)" id="binary-classificaiton-nav">
+									Binary classificaiton
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#model-1" onclick="onNavClick(`#model-1-nav`)" id="model-1-nav">
+									Model
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#cost-function-1" onclick="onNavClick(`#cost-function-1-nav`)" id="cost-function-1-nav">
+									Cost function
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#gradient-descent-1" onclick="onNavClick(`#gradient-descent-1-nav`)" id="gradient-descent-1-nav">
+									Gradient descent
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#improvement" onclick="onNavClick(`#improvement-nav`)" id="improvement-nav">
+									Improvement
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#feature-scaling" onclick="onNavClick(`#feature-scaling-nav`)" id="feature-scaling-nav">
+									Feature Scaling
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#feature-engineering" onclick="onNavClick(`#feature-engineering-nav`)" id="feature-engineering-nav">
+									Feature Engineering
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#regularization" onclick="onNavClick(`#regularization-nav`)" id="regularization-nav">
+									Regularization
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#use-scikit-learn" onclick="onNavClick(`#use-scikit-learn-nav`)" id="use-scikit-learn-nav">
+									Use scikit-learn
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://windytiany.github.io/">
+            tiany&#39;s Blog
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://windytiany.github.io/">
+        <div class="single-column-header-title">tiany&#39;s Blog</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    Notes on machine learning 1
+                    
+                    <div class="post-subtitle">
+                        I take Andrew Ng&#39;s machine learning class and this note can help me recap the essential formula and code.
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2023-02-04 19:13
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/">[note]</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/machine-lerning">machine lerning</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p><em><strong>Notice: the note only contains the part 1 of the specialization.</strong></em></p>
+<h1 id="regression">Regression</h1>
+<h3 id="model">Model</h3>
+<p>$f(\overrightarrow x)=\overrightarrow w\cdot\overrightarrow x+b=w_1x_1+w_2x_2+&hellip;+w_nx_n+b$</p>
+<h3 id="terminology">Terminology</h3>
+<p>$\overrightarrow x$: features.(It can be scalar if there is only one feature)</p>
+<p>$y$: the output.(given by dataset)</p>
+<p>$m$: the number of trianing examples.</p>
+<p>n: the number of features.</p>
+<p>$x^{(i)}, y^{(i)}$: the $i$th trianing example.</p>
+<p>$f(x), \hat y$: the estimated value of y.</p>
+<p>$\overrightarrow w, b$: parameters of the model.</p>
+<h3 id="cost-function">Cost function</h3>
+<p>$J(\overrightarrow w, b) = {1\over2m}\sum_{i=1}^m(f(x^{(i)}) - y^{(i)})^2$</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">compute_cost</span>(X, y, w, b):
+</span></span><span style="display:flex;"><span>    total_cost <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(m):
+</span></span><span style="display:flex;"><span>        total_cost <span style="color:#f92672">+=</span> (np<span style="color:#f92672">.</span>dot(X[i], w) <span style="color:#f92672">+</span> b <span style="color:#f92672">-</span> y[i]) <span style="color:#f92672">**</span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>    total_cost <span style="color:#f92672">/=</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> m
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> total_cost
+</span></span></code></pre></div><h3 id="gradient-descent">Gradient descent</h3>
+<p><strong>calculate gradient</strong></p>
+<p>for w:</p>
+<p>${\partial J(\overrightarrow w, b)\over\partial w_j}={1\over m}\sum_{i=1}^m(f(x^{(i)})-y^{(i)})x_j^{(i)}$</p>
+<p>for b:</p>
+<p>${\partial J(\overrightarrow w, b)\over\partial b}={1\over m}\sum_{i=1}^m(f(x^{(i)})-y^{(i)})$</p>
+<p><strong>update</strong></p>
+<p>$w_j=w_j-\alpha{1\over m}\sum_{i=1}^m(f(x^{(i)})-y^{(i)})x_j^{(i)}$</p>
+<p>$b=b-\alpha{1\over m}\sum_{i=1}^m(f(x^{(i)})-y^{(i)})$</p>
+<p><em>($\alpha$ is learning rate chosen by yourself)</em></p>
+<p><em>(update these parameters simultaneously)</em></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">calculate_gradient</span>(X, y, w, b):
+</span></span><span style="display:flex;"><span>    dj_dw <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>zeros(n)
+</span></span><span style="display:flex;"><span>    dj_db <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(m):
+</span></span><span style="display:flex;"><span>        dj_dw <span style="color:#f92672">+=</span> (np<span style="color:#f92672">.</span>dot(X[i], w) <span style="color:#f92672">+</span> b <span style="color:#f92672">-</span> y[i]) <span style="color:#f92672">*</span> X[i]
+</span></span><span style="display:flex;"><span>        dj_db <span style="color:#f92672">+=</span> np<span style="color:#f92672">.</span>dot(X[i], w) <span style="color:#f92672">+</span> b <span style="color:#f92672">-</span> y[i]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    dj_dw <span style="color:#f92672">/=</span> m
+</span></span><span style="display:flex;"><span>    dj_db <span style="color:#f92672">/=</span> m
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> dj_dw, dj_db
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">gradient_descent</span>(X, y, w, b, alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.01</span>, iterations<span style="color:#f92672">=</span><span style="color:#ae81ff">100000</span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> iterations:
+</span></span><span style="display:flex;"><span>        dj_dw, dj_db <span style="color:#f92672">=</span> calculate_gradient(X, y, w, b)
+</span></span><span style="display:flex;"><span>        w <span style="color:#f92672">=</span> w <span style="color:#f92672">-</span> alpha <span style="color:#f92672">*</span> dj_dw
+</span></span><span style="display:flex;"><span>        b <span style="color:#f92672">=</span> b <span style="color:#f92672">-</span> alpha <span style="color:#f92672">*</span> dj_db
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        iteration <span style="color:#f92672">-=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> w, b
+</span></span></code></pre></div><h1 id="binary-classificaiton">Binary classificaiton</h1>
+<p><em><strong>the algorithm is called logistic regression, but it has no relation with Regression problems.</strong></em></p>
+<h3 id="model-1">Model</h3>
+<p><strong>sigmoid function</strong></p>
+<p>$f(z)={1\over{1+e^{-z}}}$</p>
+<p><strong>logistic regression model</strong></p>
+<p>$f(\overrightarrow x)={1\over{1+e^{-(\overrightarrow w\cdot\overrightarrow x+b)}}}$</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">sigmoid</span>(z):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">/</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">+</span> np<span style="color:#f92672">.</span>exp(<span style="color:#f92672">-</span>z))
+</span></span></code></pre></div><h3 id="cost-function-1">Cost function</h3>
+<p><strong>loss function</strong></p>
+<p>$loss=-y^{(i)}log(f(x^{(i)}))-(1-y^{(i)})log(1-f(x^{(i)}))$</p>
+<p><strong>cost function</strong></p>
+<p>$J(\overrightarrow w, b)={1\over m}\sum_{i=1}^mloss$</p>
+<p>The loss function is simplified by the following formula:</p>
+<p>$$
+loss=
+\begin{cases}
+-log(1-f(x^{(i)}))&amp; when&amp;y^{(i)}=0 \\
+-log(f(x^{(i)}))&amp; when&amp;y^{(i)}=1
+\end{cases}
+$$</p>
+<p><strong>Why this function?</strong></p>
+<p>$when\space y^{(i)}=0,\space if\space f(x^{(i)})\rightarrow0, loss\rightarrow0$</p>
+<p>$when\space y^{(i)}=0,\space if\space f(x^{(i)})\rightarrow1, loss\rightarrow\infty$</p>
+<p>$when\space y^{(i)}=1,\space if\space f(x^{(i)})\rightarrow0, loss\rightarrow\infty$</p>
+<p>$when\space y^{(i)}=1,\space if\space f(x^{(i)})\rightarrow1, loss\rightarrow0$</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">compute_cost</span>(X, y, w, b):
+</span></span><span style="display:flex;"><span>    cost <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(m):
+</span></span><span style="display:flex;"><span>        z_i <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>dot(X[i], w) <span style="color:#f92672">+</span> b
+</span></span><span style="display:flex;"><span>        f_i <span style="color:#f92672">=</span> sigmoid(z_i)
+</span></span><span style="display:flex;"><span>        loss <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>y[i] <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>log(f_i) <span style="color:#f92672">-</span> (<span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>y[i]) <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>log(<span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>f_i)
+</span></span><span style="display:flex;"><span>        cost <span style="color:#f92672">+=</span> loss
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    cost <span style="color:#f92672">/=</span> m
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> cost
+</span></span></code></pre></div><h3 id="gradient-descent-1">Gradient descent</h3>
+<p><strong>calculate gradient</strong></p>
+<p>for w:</p>
+<p>${\partial J(\overrightarrow w, b)\over\partial w_j}={1\over m}\sum_{i=1}^m(f(x^{(i)})-y^{(i)})x_j^{(i)}$</p>
+<p>for b:</p>
+<p>${\partial J(\overrightarrow w, b)\over\partial b}={1\over m}\sum_{i=1}^m(f(x^{(i)})-y^{(i)})$</p>
+<p><strong>update</strong></p>
+<p>$w_j=w_j-\alpha{1\over m}\sum_{i=1}^m(f(x^{(i)})-y^{(i)})x_j^{(i)}$</p>
+<p>$b=b-\alpha{1\over m}\sum_{i=1}^m(f(x^{(i)})-y^{(i)})$</p>
+<p><em>(alpha is learning rate chosen by yourself)</em></p>
+<p><em>(update these parameters simultaneously)</em></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">calculate_gradient</span>(X, y, w, b):
+</span></span><span style="display:flex;"><span>    dj_dw <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>zeros(n)
+</span></span><span style="display:flex;"><span>    dj_db <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(m):
+</span></span><span style="display:flex;"><span>        z_i <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>dot(X[i], w) <span style="color:#f92672">+</span> b
+</span></span><span style="display:flex;"><span>        f_i <span style="color:#f92672">=</span> sigmoid(z_i)
+</span></span><span style="display:flex;"><span>        dj_dw <span style="color:#f92672">+=</span> (f_i <span style="color:#f92672">-</span> y[i]) <span style="color:#f92672">*</span> X[i]
+</span></span><span style="display:flex;"><span>        dj_db <span style="color:#f92672">+=</span> f_i <span style="color:#f92672">-</span> y[i]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    dj_dw <span style="color:#f92672">/=</span> m
+</span></span><span style="display:flex;"><span>    dj_db <span style="color:#f92672">/=</span> m
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> dj_dw, dj_db
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">gradient_descent</span>(X, y, w, b, alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.01</span>, iterations<span style="color:#f92672">=</span><span style="color:#ae81ff">100000</span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> iterations:
+</span></span><span style="display:flex;"><span>        dj_dw, dj_db <span style="color:#f92672">=</span> calculate_gradient(X, y, w, b)
+</span></span><span style="display:flex;"><span>        w <span style="color:#f92672">=</span> w <span style="color:#f92672">-</span> alpha <span style="color:#f92672">*</span> dj_dw
+</span></span><span style="display:flex;"><span>        b <span style="color:#f92672">=</span> b <span style="color:#f92672">-</span> alpha <span style="color:#f92672">*</span> dj_db
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        iteration <span style="color:#f92672">-=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> w, b
+</span></span></code></pre></div><h1 id="improvement">Improvement</h1>
+<h3 id="feature-scaling">Feature Scaling</h3>
+<p>This method is to reduce the range of features so the algorithm can be implemented efficiently.</p>
+<p><strong>Way 1:</strong></p>
+<p>$x_j = {x_j\over{max(x_j)}}$</p>
+<p><strong>Way 2: Mean normalization</strong></p>
+<p>$x_j={x_j-\mu_j\over{max(x_j)-min(x_j)}}$</p>
+<p>($\mu_j$ is the mean of all $x_j$)</p>
+<p><strong>Way 3: Z-score normalization</strong></p>
+<p>$x_j={x_j-\mu_j\over\sigma_j}$</p>
+<p>($\sigma_j$ is standard deviation)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Z-score normalization</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">Z_score_normalization</span>(X):
+</span></span><span style="display:flex;"><span>    mu <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>mean(X, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>    sigma <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>std(X, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>    X <span style="color:#f92672">=</span> (X <span style="color:#f92672">-</span> mu) <span style="color:#f92672">/</span> sigma
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> X
+</span></span></code></pre></div><h3 id="feature-engineering">Feature Engineering</h3>
+<p>This method can be used in polynomial regression. For example, you can create a new feature which is equal to square of the original features. Then, you can take this feature and run gradient descent. At last, you may get a non-linear model.</p>
+<h3 id="regularization">Regularization</h3>
+<p>This method is to solve the problem of overfitting.</p>
+<h5 id="regression-1">Regression</h5>
+<p><strong>regularized cost function</strong></p>
+<p>$J(\overrightarrow w, b)={1\over2m}\sum_{i=1}^m(f(x^{(i)}) - y^{(i)})^2+{\lambda\over2m}\sum_{j=1}^nw_j^2$</p>
+<p><strong>regularized gradient</strong></p>
+<p>for w:</p>
+<p>${\partial J(\overrightarrow w, b)\over\partial w_j}={1\over m}\sum_{i=1}^m(f(x^{(i)})-y^{(i)})x_j^{(i)}+{\lambda\over m}w_j$</p>
+<p>for b:(there is no change)</p>
+<p>${\partial J(\overrightarrow w, b)\over\partial b}={1\over m}\sum_{i=1}^m(f(x^{(i)})-y^{(i)})$</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">compute_regularized_cost</span>(X, y, w, b, _lambda<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>):
+</span></span><span style="display:flex;"><span>    total_cost <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(m):
+</span></span><span style="display:flex;"><span>        total_cost <span style="color:#f92672">+=</span> (np<span style="color:#f92672">.</span>dot(X[i], w) <span style="color:#f92672">+</span> b <span style="color:#f92672">-</span> y[i]) <span style="color:#f92672">**</span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>    total_cost <span style="color:#f92672">/=</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> m
+</span></span><span style="display:flex;"><span>    total_cost <span style="color:#f92672">+=</span> _lambda <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>dot(w, w) <span style="color:#f92672">/</span> (<span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> m)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> total_cost
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">compute_regularized_gradient</span>(X, y, w, b, _lambda<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>):
+</span></span><span style="display:flex;"><span>    dj_dw <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>zeros(n)
+</span></span><span style="display:flex;"><span>    dj_db <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(m):
+</span></span><span style="display:flex;"><span>        dj_dw <span style="color:#f92672">+=</span> (np<span style="color:#f92672">.</span>dot(X[i], w) <span style="color:#f92672">+</span> b <span style="color:#f92672">-</span> y[i]) <span style="color:#f92672">*</span> X[i]
+</span></span><span style="display:flex;"><span>        dj_db <span style="color:#f92672">+=</span> np<span style="color:#f92672">.</span>dot(X[i], w) <span style="color:#f92672">+</span> b <span style="color:#f92672">-</span> y[i]
+</span></span><span style="display:flex;"><span>    dj_dw <span style="color:#f92672">/=</span> m
+</span></span><span style="display:flex;"><span>    dj_db <span style="color:#f92672">/=</span> m
+</span></span><span style="display:flex;"><span>    dj_dw <span style="color:#f92672">+=</span> _lambda <span style="color:#f92672">*</span> w <span style="color:#f92672">/</span> m
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> dj_dw, dj_db
+</span></span></code></pre></div><h5 id="binary-classification">Binary Classification</h5>
+<p><strong>regularized cost function</strong></p>
+<p>$J(\overrightarrow w, b)={1\over m}\sum_{i=1}^m[-y^{(i)}log(f(x^{(i)}))-(1-y^{(i)})log(1-f(x^{(i)}))]+{\lambda\over2m}\sum_{j=1}^nw_j^2$</p>
+<p><strong>regularized gradient</strong></p>
+<p>for w:</p>
+<p>${\partial J(\overrightarrow w, b)\over\partial w_j}={1\over m}\sum_{i=1}^m(f(x^{(i)})-y^{(i)})x_j^{(i)}+{\lambda\over m}w_j$</p>
+<p>for b:(there is no change)</p>
+<p>${\partial J(\overrightarrow w, b)\over\partial b}={1\over m}\sum_{i=1}^m(f(x^{(i)})-y^{(i)})$</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">compute_regularized_cost</span>(X, y, w, b, _lambda<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>):
+</span></span><span style="display:flex;"><span>    total_cost <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(m):
+</span></span><span style="display:flex;"><span>        err_i <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>dot(X[i], w) <span style="color:#f92672">+</span> b
+</span></span><span style="display:flex;"><span>        f_i <span style="color:#f92672">=</span> sigmoid(z_i)
+</span></span><span style="display:flex;"><span>        loss <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>y[i] <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>log(f_i) <span style="color:#f92672">-</span> (<span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>y[i]) <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>log(<span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>f_i)
+</span></span><span style="display:flex;"><span>        total_cost <span style="color:#f92672">+=</span> loss
+</span></span><span style="display:flex;"><span>    total_cost <span style="color:#f92672">/=</span> m
+</span></span><span style="display:flex;"><span>    total_cost <span style="color:#f92672">+=</span> _lambda <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>dot(w, w) <span style="color:#f92672">/</span> (<span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> m)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> total_cost
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">compute_regularized_gradient</span>(X, y, w, b, _lambda<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>):
+</span></span><span style="display:flex;"><span>    dj_dw <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>zeros(n)
+</span></span><span style="display:flex;"><span>    dj_db <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(m):
+</span></span><span style="display:flex;"><span>        err_i <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>dot(X[i], w) <span style="color:#f92672">+</span> b
+</span></span><span style="display:flex;"><span>        f_i <span style="color:#f92672">=</span> sigmoid(z_i)
+</span></span><span style="display:flex;"><span>        dj_dw <span style="color:#f92672">+=</span> (f_i <span style="color:#f92672">-</span> y[i]) <span style="color:#f92672">*</span> X[i]
+</span></span><span style="display:flex;"><span>        dj_db <span style="color:#f92672">+=</span> f_i <span style="color:#f92672">-</span> y[i]
+</span></span><span style="display:flex;"><span>    dj_dw <span style="color:#f92672">/=</span> m
+</span></span><span style="display:flex;"><span>    dj_db <span style="color:#f92672">/=</span> m
+</span></span><span style="display:flex;"><span>    dj_dw <span style="color:#f92672">+=</span> _lambda <span style="color:#f92672">*</span> w <span style="color:#f92672">/</span> m
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> dj_dw, dj_db
+</span></span></code></pre></div><h1 id="use-scikit-learn">Use scikit-learn</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn.linear_model <span style="color:#f92672">import</span> LinearRegression, SGDRegressor, LogisticRegression
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn.preprocessing <span style="color:#f92672">import</span> StandardScaler
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#create Linear Regression model</span>
+</span></span><span style="display:flex;"><span>linear_model <span style="color:#f92672">=</span> LinearRegression()
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#X must be a 2-D Matrix to fit the model</span>
+</span></span><span style="display:flex;"><span>linear_model<span style="color:#f92672">.</span>fit(X_train<span style="color:#f92672">.</span>reshape(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>), y_train) 
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#view parameters</span>
+</span></span><span style="display:flex;"><span>b <span style="color:#f92672">=</span> linear_model<span style="color:#f92672">.</span>intercept_
+</span></span><span style="display:flex;"><span>w <span style="color:#f92672">=</span> linear_model<span style="color:#f92672">.</span>coef_
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#make prediction</span>
+</span></span><span style="display:flex;"><span>y_pred <span style="color:#f92672">=</span> linear_model<span style="color:#f92672">.</span>predict(X_train<span style="color:#f92672">.</span>reshape(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>))
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#---------------------------------------------------------------------</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#feature scaling(Z-score normalization)</span>
+</span></span><span style="display:flex;"><span>scaler <span style="color:#f92672">=</span> StandardScaler()
+</span></span><span style="display:flex;"><span>X_norm <span style="color:#f92672">=</span> scaler<span style="color:#f92672">.</span>fit_transform(X_train)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#create and fit a gradient descent regression model</span>
+</span></span><span style="display:flex;"><span>sgdr <span style="color:#f92672">=</span> SGDRegressor(max_iter<span style="color:#f92672">=</span><span style="color:#ae81ff">1000</span>)
+</span></span><span style="display:flex;"><span>sgdr<span style="color:#f92672">.</span>fit(X_norm, y_train)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#view parameters</span>
+</span></span><span style="display:flex;"><span>b_norm <span style="color:#f92672">=</span> sgdr<span style="color:#f92672">.</span>intercept_
+</span></span><span style="display:flex;"><span>w_norm <span style="color:#f92672">=</span> sgdr<span style="color:#f92672">.</span>coef_
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#make prediction</span>
+</span></span><span style="display:flex;"><span>y_pred_sgd <span style="color:#f92672">=</span> sgdr<span style="color:#f92672">.</span>predict(X_norm)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#---------------------------------------------------------------------</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#create and fit a Logistic Regression model</span>
+</span></span><span style="display:flex;"><span>lr_model <span style="color:#f92672">=</span> LogisticRegression()
+</span></span><span style="display:flex;"><span>lr_model<span style="color:#f92672">.</span>fit(X, y)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#make prediction</span>
+</span></span><span style="display:flex;"><span>y_pred <span style="color:#f92672">=</span> lr_model<span style="color:#f92672">.</span>predict(X)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#calculate accuracy</span>
+</span></span><span style="display:flex;"><span>print(lr_model<span style="color:#f92672">.</span>score(X, y))
+</span></span></code></pre></div>
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2023-02-04</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			Next<br>No newer posts.
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/posts/post3/">
+			Previous<br>LaTeX Math Formula
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	tiany - AS student
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>

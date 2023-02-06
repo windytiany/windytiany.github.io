@@ -7,9 +7,274 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>tiany - AS student</copyright>
-    <lastBuildDate>Sat, 04 Feb 2023 12:43:33 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 04 Feb 2023 19:13:40 +0800</lastBuildDate>
     
         <atom:link href="https://windytiany.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Notes on machine learning 1</title>
+        <link>https://windytiany.github.io/posts/post4/</link>
+        <pubDate>Sat, 04 Feb 2023 19:13:40 +0800</pubDate>
+        
+        <guid>https://windytiany.github.io/posts/post4/</guid>
+        <description>tiany&#39;s Blog https://windytiany.github.io/posts/post4/ -&lt;p&gt;&lt;em&gt;&lt;strong&gt;Notice: the note only contains the part 1 of the specialization.&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;h1 id=&#34;regression&#34;&gt;Regression&lt;/h1&gt;
+&lt;h3 id=&#34;model&#34;&gt;Model&lt;/h3&gt;
+&lt;p&gt;$f(\overrightarrow x)=\overrightarrow w\cdot\overrightarrow x+b=w_1x_1+w_2x_2+&amp;hellip;+w_nx_n+b$&lt;/p&gt;
+&lt;h3 id=&#34;terminology&#34;&gt;Terminology&lt;/h3&gt;
+&lt;p&gt;$\overrightarrow x$: features.(It can be scalar if there is only one feature)&lt;/p&gt;
+&lt;p&gt;$y$: the output.(given by dataset)&lt;/p&gt;
+&lt;p&gt;$m$: the number of trianing examples.&lt;/p&gt;
+&lt;p&gt;n: the number of features.&lt;/p&gt;
+&lt;p&gt;$x^{(i)}, y^{(i)}$: the $i$th trianing example.&lt;/p&gt;
+&lt;p&gt;$f(x), \hat y$: the estimated value of y.&lt;/p&gt;
+&lt;p&gt;$\overrightarrow w, b$: parameters of the model.&lt;/p&gt;
+&lt;h3 id=&#34;cost-function&#34;&gt;Cost function&lt;/h3&gt;
+&lt;p&gt;$J(\overrightarrow w, b) = {1\over2m}\sum_{i=1}^m(f(x^{(i)}) - y^{(i)})^2$&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute_cost&lt;/span&gt;(X, y, w, b):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    total_cost &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(m):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        total_cost &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; (np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;dot(X[i], w) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; b &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; y[i]) &lt;span style=&#34;color:#f92672&#34;&gt;**&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    total_cost &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; m
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; total_cost
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;gradient-descent&#34;&gt;Gradient descent&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;calculate gradient&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;for w:&lt;/p&gt;
+&lt;p&gt;${\partial J(\overrightarrow w, b)\over\partial w_j}={1\over m}\sum_{i=1}^m(f(x^{(i)})-y^{(i)})x_j^{(i)}$&lt;/p&gt;
+&lt;p&gt;for b:&lt;/p&gt;
+&lt;p&gt;${\partial J(\overrightarrow w, b)\over\partial b}={1\over m}\sum_{i=1}^m(f(x^{(i)})-y^{(i)})$&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;update&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;$w_j=w_j-\alpha{1\over m}\sum_{i=1}^m(f(x^{(i)})-y^{(i)})x_j^{(i)}$&lt;/p&gt;
+&lt;p&gt;$b=b-\alpha{1\over m}\sum_{i=1}^m(f(x^{(i)})-y^{(i)})$&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;($\alpha$ is learning rate chosen by yourself)&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;(update these parameters simultaneously)&lt;/em&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;calculate_gradient&lt;/span&gt;(X, y, w, b):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    dj_dw &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;zeros(n)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    dj_db &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(m):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        dj_dw &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; (np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;dot(X[i], w) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; b &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; y[i]) &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; X[i]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        dj_db &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;dot(X[i], w) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; b &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; y[i]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    dj_dw &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; m
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    dj_db &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; m
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; dj_dw, dj_db
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;gradient_descent&lt;/span&gt;(X, y, w, b, alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.01&lt;/span&gt;, iterations&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;100000&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt; iterations:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        dj_dw, dj_db &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; calculate_gradient(X, y, w, b)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        w &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; w &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; alpha &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; dj_dw
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        b &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; b &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; alpha &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; dj_db
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        iteration &lt;span style=&#34;color:#f92672&#34;&gt;-=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; w, b
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;binary-classificaiton&#34;&gt;Binary classificaiton&lt;/h1&gt;
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;the algorithm is called logistic regression, but it has no relation with Regression problems.&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id=&#34;model-1&#34;&gt;Model&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;sigmoid function&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;$f(z)={1\over{1+e^{-z}}}$&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;logistic regression model&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;$f(\overrightarrow x)={1\over{1+e^{-(\overrightarrow w\cdot\overrightarrow x+b)}}}$&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sigmoid&lt;/span&gt;(z):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exp(&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;z))
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;cost-function-1&#34;&gt;Cost function&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;loss function&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;$loss=-y^{(i)}log(f(x^{(i)}))-(1-y^{(i)})log(1-f(x^{(i)}))$&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;cost function&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;$J(\overrightarrow w, b)={1\over m}\sum_{i=1}^mloss$&lt;/p&gt;
+&lt;p&gt;The loss function is simplified by the following formula:&lt;/p&gt;
+&lt;p&gt;$$
+loss=
+\begin{cases}
+-log(1-f(x^{(i)}))&amp;amp; when&amp;amp;y^{(i)}=0 \\
+-log(f(x^{(i)}))&amp;amp; when&amp;amp;y^{(i)}=1
+\end{cases}
+$$&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Why this function?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;$when\space y^{(i)}=0,\space if\space f(x^{(i)})\rightarrow0, loss\rightarrow0$&lt;/p&gt;
+&lt;p&gt;$when\space y^{(i)}=0,\space if\space f(x^{(i)})\rightarrow1, loss\rightarrow\infty$&lt;/p&gt;
+&lt;p&gt;$when\space y^{(i)}=1,\space if\space f(x^{(i)})\rightarrow0, loss\rightarrow\infty$&lt;/p&gt;
+&lt;p&gt;$when\space y^{(i)}=1,\space if\space f(x^{(i)})\rightarrow1, loss\rightarrow0$&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute_cost&lt;/span&gt;(X, y, w, b):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    cost &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(m):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        z_i &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;dot(X[i], w) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; b
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        f_i &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sigmoid(z_i)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        loss &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;y[i] &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;log(f_i) &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;y[i]) &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;log(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;f_i)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        cost &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; loss
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    cost &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; m
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; cost
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;gradient-descent-1&#34;&gt;Gradient descent&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;calculate gradient&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;for w:&lt;/p&gt;
+&lt;p&gt;${\partial J(\overrightarrow w, b)\over\partial w_j}={1\over m}\sum_{i=1}^m(f(x^{(i)})-y^{(i)})x_j^{(i)}$&lt;/p&gt;
+&lt;p&gt;for b:&lt;/p&gt;
+&lt;p&gt;${\partial J(\overrightarrow w, b)\over\partial b}={1\over m}\sum_{i=1}^m(f(x^{(i)})-y^{(i)})$&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;update&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;$w_j=w_j-\alpha{1\over m}\sum_{i=1}^m(f(x^{(i)})-y^{(i)})x_j^{(i)}$&lt;/p&gt;
+&lt;p&gt;$b=b-\alpha{1\over m}\sum_{i=1}^m(f(x^{(i)})-y^{(i)})$&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;(alpha is learning rate chosen by yourself)&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;(update these parameters simultaneously)&lt;/em&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;calculate_gradient&lt;/span&gt;(X, y, w, b):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    dj_dw &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;zeros(n)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    dj_db &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(m):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        z_i &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;dot(X[i], w) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; b
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        f_i &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sigmoid(z_i)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        dj_dw &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; (f_i &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; y[i]) &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; X[i]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        dj_db &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; f_i &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; y[i]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    dj_dw &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; m
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    dj_db &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; m
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; dj_dw, dj_db
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;gradient_descent&lt;/span&gt;(X, y, w, b, alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.01&lt;/span&gt;, iterations&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;100000&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt; iterations:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        dj_dw, dj_db &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; calculate_gradient(X, y, w, b)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        w &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; w &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; alpha &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; dj_dw
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        b &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; b &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; alpha &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; dj_db
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        iteration &lt;span style=&#34;color:#f92672&#34;&gt;-=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; w, b
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;improvement&#34;&gt;Improvement&lt;/h1&gt;
+&lt;h3 id=&#34;feature-scaling&#34;&gt;Feature Scaling&lt;/h3&gt;
+&lt;p&gt;This method is to reduce the range of features so the algorithm can be implemented efficiently.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Way 1:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;$x_j = {x_j\over{max(x_j)}}$&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Way 2: Mean normalization&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;$x_j={x_j-\mu_j\over{max(x_j)-min(x_j)}}$&lt;/p&gt;
+&lt;p&gt;($\mu_j$ is the mean of all $x_j$)&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Way 3: Z-score normalization&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;$x_j={x_j-\mu_j\over\sigma_j}$&lt;/p&gt;
+&lt;p&gt;($\sigma_j$ is standard deviation)&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Z-score normalization&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Z_score_normalization&lt;/span&gt;(X):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    mu &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(X, axis&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    sigma &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;std(X, axis&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    X &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (X &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; mu) &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; sigma
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; X
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;feature-engineering&#34;&gt;Feature Engineering&lt;/h3&gt;
+&lt;p&gt;This method can be used in polynomial regression. For example, you can create a new feature which is equal to square of the original features. Then, you can take this feature and run gradient descent. At last, you may get a non-linear model.&lt;/p&gt;
+&lt;h3 id=&#34;regularization&#34;&gt;Regularization&lt;/h3&gt;
+&lt;p&gt;This method is to solve the problem of overfitting.&lt;/p&gt;
+&lt;h5 id=&#34;regression-1&#34;&gt;Regression&lt;/h5&gt;
+&lt;p&gt;&lt;strong&gt;regularized cost function&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;$J(\overrightarrow w, b)={1\over2m}\sum_{i=1}^m(f(x^{(i)}) - y^{(i)})^2+{\lambda\over2m}\sum_{j=1}^nw_j^2$&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;regularized gradient&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;for w:&lt;/p&gt;
+&lt;p&gt;${\partial J(\overrightarrow w, b)\over\partial w_j}={1\over m}\sum_{i=1}^m(f(x^{(i)})-y^{(i)})x_j^{(i)}+{\lambda\over m}w_j$&lt;/p&gt;
+&lt;p&gt;for b:(there is no change)&lt;/p&gt;
+&lt;p&gt;${\partial J(\overrightarrow w, b)\over\partial b}={1\over m}\sum_{i=1}^m(f(x^{(i)})-y^{(i)})$&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute_regularized_cost&lt;/span&gt;(X, y, w, b, _lambda&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    total_cost &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(m):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        total_cost &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; (np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;dot(X[i], w) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; b &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; y[i]) &lt;span style=&#34;color:#f92672&#34;&gt;**&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    total_cost &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; m
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    total_cost &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; _lambda &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;dot(w, w) &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; m)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; total_cost
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute_regularized_gradient&lt;/span&gt;(X, y, w, b, _lambda&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    dj_dw &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;zeros(n)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    dj_db &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(m):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        dj_dw &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; (np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;dot(X[i], w) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; b &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; y[i]) &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; X[i]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        dj_db &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;dot(X[i], w) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; b &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; y[i]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    dj_dw &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; m
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    dj_db &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; m
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    dj_dw &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; _lambda &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; w &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; m
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; dj_dw, dj_db
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h5 id=&#34;binary-classification&#34;&gt;Binary Classification&lt;/h5&gt;
+&lt;p&gt;&lt;strong&gt;regularized cost function&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;$J(\overrightarrow w, b)={1\over m}\sum_{i=1}^m[-y^{(i)}log(f(x^{(i)}))-(1-y^{(i)})log(1-f(x^{(i)}))]+{\lambda\over2m}\sum_{j=1}^nw_j^2$&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;regularized gradient&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;for w:&lt;/p&gt;
+&lt;p&gt;${\partial J(\overrightarrow w, b)\over\partial w_j}={1\over m}\sum_{i=1}^m(f(x^{(i)})-y^{(i)})x_j^{(i)}+{\lambda\over m}w_j$&lt;/p&gt;
+&lt;p&gt;for b:(there is no change)&lt;/p&gt;
+&lt;p&gt;${\partial J(\overrightarrow w, b)\over\partial b}={1\over m}\sum_{i=1}^m(f(x^{(i)})-y^{(i)})$&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute_regularized_cost&lt;/span&gt;(X, y, w, b, _lambda&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    total_cost &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(m):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        err_i &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;dot(X[i], w) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; b
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        f_i &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sigmoid(z_i)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        loss &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;y[i] &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;log(f_i) &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;y[i]) &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;log(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;f_i)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        total_cost &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; loss
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    total_cost &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; m
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    total_cost &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; _lambda &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;dot(w, w) &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; m)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; total_cost
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute_regularized_gradient&lt;/span&gt;(X, y, w, b, _lambda&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    dj_dw &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;zeros(n)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    dj_db &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(m):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        err_i &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;dot(X[i], w) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; b
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        f_i &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sigmoid(z_i)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        dj_dw &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; (f_i &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; y[i]) &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; X[i]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        dj_db &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; f_i &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; y[i]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    dj_dw &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; m
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    dj_db &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; m
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    dj_dw &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; _lambda &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; w &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; m
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; dj_dw, dj_db
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;use-scikit-learn&#34;&gt;Use scikit-learn&lt;/h1&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; sklearn.linear_model &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; LinearRegression, SGDRegressor, LogisticRegression
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; sklearn.preprocessing &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; StandardScaler
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#create Linear Regression model&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;linear_model &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; LinearRegression()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#X must be a 2-D Matrix to fit the model&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;linear_model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;fit(X_train&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;reshape(&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;), y_train) 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#view parameters&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;b &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; linear_model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;intercept_
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;w &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; linear_model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;coef_
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#make prediction&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;y_pred &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; linear_model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;predict(X_train&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;reshape(&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#---------------------------------------------------------------------&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#feature scaling(Z-score normalization)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;scaler &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; StandardScaler()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;X_norm &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; scaler&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;fit_transform(X_train)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#create and fit a gradient descent regression model&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sgdr &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; SGDRegressor(max_iter&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sgdr&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;fit(X_norm, y_train)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#view parameters&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;b_norm &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sgdr&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;intercept_
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;w_norm &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sgdr&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;coef_
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#make prediction&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;y_pred_sgd &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sgdr&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;predict(X_norm)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#---------------------------------------------------------------------&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#create and fit a Logistic Regression model&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;lr_model &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; LogisticRegression()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;lr_model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;fit(X, y)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#make prediction&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;y_pred &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; lr_model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;predict(X)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#calculate accuracy&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;print(lr_model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;score(X, y))
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://windytiany.github.io/posts/post4/ - tiany - AS student</description>
+        </item>
     
     
     
